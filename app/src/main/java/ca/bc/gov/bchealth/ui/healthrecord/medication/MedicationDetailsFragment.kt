@@ -34,7 +34,9 @@ class MedicationDetailsFragment : BaseFragment(R.layout.fragment_medication_deta
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUI()
-        viewModel.getMedicationDetails(args.medicationId)
+        if (medicationDetailAdapter.currentList.isEmpty()) {
+            viewModel.getMedicationDetails(args.medicationId)
+        }
         observeUiState()
     }
 
@@ -53,7 +55,11 @@ class MedicationDetailsFragment : BaseFragment(R.layout.fragment_medication_deta
     }
 
     private fun setUpRecyclerView() {
-        commentsAdapter = CommentsAdapter()
+        commentsAdapter = CommentsAdapter { parentEntryId ->
+            val action = MedicationDetailsFragmentDirections
+                .actionMedicationDetailsFragmentToCommentsFragment(parentEntryId)
+            findNavController().navigate(action)
+        }
         medicationDetailAdapter = MedicationDetailAdapter()
         concatAdapter = ConcatAdapter(medicationDetailAdapter, commentsAdapter)
         val recyclerView = binding.rvMedicationDetailList
@@ -75,10 +81,12 @@ class MedicationDetailsFragment : BaseFragment(R.layout.fragment_medication_deta
 
                     if (state.comments.isNotEmpty()) {
                         commentsAdapter.submitList(state.comments)
+                        viewModel.resetUiState()
                     }
 
                     if (state.onError) {
                         showError()
+                        viewModel.resetUiState()
                     }
                     userProfileId = state.userProfileId
                 }
