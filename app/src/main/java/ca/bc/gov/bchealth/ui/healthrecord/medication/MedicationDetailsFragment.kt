@@ -39,6 +39,7 @@ class MedicationDetailsFragment : BaseFragment(R.layout.fragment_medication_deta
 
     private fun initUI() {
         setUpRecyclerView()
+        addCommentListener()
     }
 
     override fun setToolBar(appBarConfiguration: AppBarConfiguration) {
@@ -93,5 +94,11 @@ class MedicationDetailsFragment : BaseFragment(R.layout.fragment_medication_deta
                 findNavController().popBackStack()
             }
         )
+    }
+
+    private fun addCommentListener() {
+        binding.tipComment.setEndIconOnClickListener {
+            viewModel.addComment(args.medicationId, binding.edComment.text.toString())
+        }
     }
 }
