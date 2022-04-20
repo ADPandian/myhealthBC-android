@@ -29,6 +29,7 @@ class MedicationDetailsFragment : BaseFragment(R.layout.fragment_medication_deta
     private lateinit var medicationDetailAdapter: MedicationDetailAdapter
     private lateinit var commentsAdapter: CommentsAdapter
     private lateinit var concatAdapter: ConcatAdapter
+    private var userProfileId: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,6 +80,7 @@ class MedicationDetailsFragment : BaseFragment(R.layout.fragment_medication_deta
                     if (state.onError) {
                         showError()
                     }
+                    userProfileId = state.userProfileId
                 }
             }
         }
@@ -97,8 +99,14 @@ class MedicationDetailsFragment : BaseFragment(R.layout.fragment_medication_deta
     }
 
     private fun addCommentListener() {
-        binding.tipComment.setEndIconOnClickListener {
-            viewModel.addComment(args.medicationId, binding.edComment.text.toString())
+        binding.comment.tipComment.setEndIconOnClickListener {
+            if (!binding.comment.edComment.text.isNullOrBlank()) {
+                viewModel.addComment(
+                    args.medicationId,
+                    userProfileId,
+                    binding.comment.edComment.text.toString()
+                )
+            }
         }
     }
 }
