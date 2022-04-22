@@ -117,7 +117,8 @@ class MedicationDetailsFragment : BaseFragment(R.layout.fragment_medication_deta
                 if (!binding.comment.edComment.text.isNullOrBlank()) {
                     viewModel.addComment(
                         args.medicationId,
-                        binding.comment.edComment.text.toString()
+                        binding.comment.edComment.text.toString(),
+                        "Med"
                     )
                 }
             }
