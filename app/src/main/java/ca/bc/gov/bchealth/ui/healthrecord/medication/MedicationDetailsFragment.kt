@@ -87,6 +87,8 @@ class MedicationDetailsFragment : BaseFragment(R.layout.fragment_medication_deta
                     if (state.comments.isNotEmpty()) {
                         commentsAdapter.submitList(state.comments)
                         viewModel.resetUiState()
+                        //clear comment
+                        binding.comment.edComment.setText("")
                     }
 
                     if (state.onError) {
