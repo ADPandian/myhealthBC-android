@@ -7,6 +7,7 @@ import androidx.work.WorkerParameters
 import ca.bc.gov.common.R
 import ca.bc.gov.common.exceptions.ProtectiveWordException
 import ca.bc.gov.common.model.ProtectiveWordState
+import ca.bc.gov.common.model.comment.CommentDto
 import ca.bc.gov.common.model.immunization.ImmunizationRecordWithForecastDto
 import ca.bc.gov.common.model.labtest.LabOrderWithLabTestDto
 import ca.bc.gov.common.model.patient.PatientDto
@@ -83,6 +84,7 @@ class FetchAuthenticatedHealthRecordsWorker @AssistedInject constructor(
             var medicationResponse: MedicationStatementResponse? = null
             var labOrdersResponse: List<LabOrderWithLabTestDto>? = null
             var immunizationResponse: List<ImmunizationRecordWithForecastDto>? = null
+            var commentsResponse: List<CommentDto>? = null
 
             notificationHelper.showNotification(
                 context.getString(R.string.notification_title_while_fetching_data)
@@ -180,7 +182,16 @@ class FetchAuthenticatedHealthRecordsWorker @AssistedInject constructor(
             /**
              * Fetch comments
              */
-
+            try {
+                withContext(dispatcher) {
+                    commentsResponse = commentsRepository.getComments(
+                        authParameters.first,
+                        authParameters.second
+                    )
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
 
             /*
             * DB Operations
@@ -233,6 +244,10 @@ class FetchAuthenticatedHealthRecordsWorker @AssistedInject constructor(
                     )
                 }
             }
+
+            //Insert comments
+            commentsRepository.delete(true)
+            commentsResponse?.let { commentsRepository.insert(it) }
 
             if (isApiFailed) {
                 notificationHelper.updateNotification(context.getString(R.string.notification_title_on_failed))
