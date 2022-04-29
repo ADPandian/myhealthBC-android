@@ -13,6 +13,7 @@ import ca.bc.gov.common.model.patient.PatientDto
 import ca.bc.gov.common.model.test.CovidOrderWithCovidTestDto
 import ca.bc.gov.data.datasource.local.preference.EncryptedPreferenceStorage
 import ca.bc.gov.data.datasource.remote.model.response.MedicationStatementResponse
+import ca.bc.gov.repository.CommentRepository
 import ca.bc.gov.repository.FetchVaccineRecordRepository
 import ca.bc.gov.repository.MedicationRecordRepository
 import ca.bc.gov.repository.PatientWithBCSCLoginRepository
@@ -58,7 +59,8 @@ class FetchAuthenticatedHealthRecordsWorker @AssistedInject constructor(
     private val encryptedPreferenceStorage: EncryptedPreferenceStorage,
     private val patientWithBCSCLoginRepository: PatientWithBCSCLoginRepository,
     private val immunizationRecordRepository: ImmunizationRecordRepository,
-    private val immunizationForecastRepository: ImmunizationForecastRepository
+    private val immunizationForecastRepository: ImmunizationForecastRepository,
+    private val commentsRepository: CommentRepository
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
@@ -174,6 +176,11 @@ class FetchAuthenticatedHealthRecordsWorker @AssistedInject constructor(
             } catch (e: Exception) {
                 isApiFailed = true
             }
+
+            /**
+             * Fetch comments
+             */
+
 
             /*
             * DB Operations
