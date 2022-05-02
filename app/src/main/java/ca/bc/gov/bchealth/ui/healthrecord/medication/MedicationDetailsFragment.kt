@@ -35,6 +35,7 @@ class MedicationDetailsFragment : BaseFragment(R.layout.fragment_medication_deta
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUI()
+        viewModel.getParentEntryId(args.medicationId)
         if (medicationDetailAdapter.currentList.isEmpty()) {
             viewModel.getMedicationDetails(args.medicationId)
         }
@@ -84,7 +85,6 @@ class MedicationDetailsFragment : BaseFragment(R.layout.fragment_medication_deta
 
                     if (state.comments.isNotEmpty()) {
                         commentsAdapter.submitList(state.comments)
-                        viewModel.resetUiState()
                         // clear comment
                         binding.comment.edComment.setText("")
                     }
@@ -116,7 +116,6 @@ class MedicationDetailsFragment : BaseFragment(R.layout.fragment_medication_deta
             setEndIconOnClickListener {
                 if (!binding.comment.edComment.text.isNullOrBlank()) {
                     viewModel.addComment(
-                        args.medicationId,
                         binding.comment.edComment.text.toString(),
                         "Med"
                     )
