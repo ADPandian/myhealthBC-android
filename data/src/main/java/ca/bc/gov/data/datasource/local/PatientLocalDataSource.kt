@@ -44,6 +44,7 @@ class PatientLocalDataSource @Inject constructor(
                 labTestCount = patientDao.getPatientsLabOrderCount(patientEntity.id),
                 covidTestCount = patientDao.getPatientsCovidOrderCount(patientEntity.id),
                 medicationRecordCount = patientDao.getPatientsMedicationCount(patientEntity.id),
+                immunizationCount = patientDao.getPatientsImmunisationCount(patientEntity.id)
             )
         }
     }

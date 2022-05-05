@@ -51,7 +51,8 @@ class PatientRepository @Inject constructor(
                     patientHealthRecords.testResultCount +
                     patientHealthRecords.medicationRecordCount +
                     patientHealthRecords.labTestCount +
-                    patientHealthRecords.covidTestCount
+                    patientHealthRecords.covidTestCount +
+                    patientHealthRecords.immunizationCount
                 ) > 0
         }
     }

@@ -121,6 +121,16 @@ interface PatientDao {
 
     @Transaction
     @Query(
+        """SELECT COUNT(DISTINCT V.id)
+            FROM patient P
+            LEFT JOIN immunization_record V
+            ON V.patient_id = P.id
+            WHERE P.id = :patientId """
+    )
+    suspend fun getPatientsImmunisationCount(patientId: Long): Int
+
+    @Transaction
+    @Query(
         "SELECT" +
             " (SELECT COUNT(*) FROM test_result WHERE data_source = 'BCSC') +" +
             " (SELECT COUNT(*) FROM vaccine_record WHERE data_source = 'BCSC') +" +

@@ -6,7 +6,6 @@ import android.net.Uri
 import android.util.Base64
 import androidx.core.net.toUri
 import androidx.work.Constraints
-import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
@@ -121,7 +120,7 @@ class BcscAuthRepo(
     * Check for logged in session
     * */
     suspend fun checkSession(): Boolean {
-        return encryptedPreferenceStorage.sessionTime > Instant.now().epochSecond
+        return encryptedPreferenceStorage.sessionTime > Instant.now().epochSecond + 1700
     }
 
     /*
